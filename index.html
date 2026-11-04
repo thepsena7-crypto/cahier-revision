@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<!-- Compteur de visites anonyme (GoatCounter, gratuit, sans cookies) -->
+<script data-goatcounter="https://cahier-ciel.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <style>
 :root { --bg: #f2f3f8; --sheet: #ffffff; --ink: #1c1f2e; --muted: #646a80; --line: #e2e4ee; --acc: #4a72de; --bad: #c2392f; color-scheme: light; }
 @media (prefers-color-scheme: dark) { :root { --bg: #11121b; --sheet: #1a1c28; --ink: #eceef7; --muted: #a0a6bb; --line: #2b2e40; --acc: #8aa8f5; --bad: #f58d82; color-scheme: dark; } }
@@ -63,6 +65,15 @@ function show(html) {
   document.body.replaceChildren(...[...d.body.childNodes].map(n => document.importNode(n, true)));
   document.body.querySelectorAll("script").forEach(old => { const s = document.createElement("script"); s.textContent = old.textContent; old.replaceWith(s); });
 }
+/* Compte une ouverture réussie du site (mot de passe bon), sans savoir qui c'est */
+function compte() {
+  let n = 0;
+  const t = () => {
+    if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: "site-ouvert", title: "Site ouvert (mot de passe bon)", event: true });
+    else if (n++ < 20) setTimeout(t, 500);
+  };
+  t();
+}
 const f = document.getElementById("f"), err = document.getElementById("err"), go = document.getElementById("go");
 f.addEventListener("submit", async e => {
   e.preventDefault();
@@ -71,7 +82,7 @@ f.addEventListener("submit", async e => {
   try {
     const html = await unlock(pw);
     if (document.getElementById("rem").checked) { try { localStorage.setItem("cahier-pw", pw); } catch (x) {} }
-    show(html);
+    show(html); compte();
   } catch (x) {
     err.textContent = "Mot de passe incorrect.";
     f.classList.remove("shake"); void f.offsetWidth; f.classList.add("shake");
@@ -80,7 +91,7 @@ f.addEventListener("submit", async e => {
 });
 (async () => {
   let saved = null; try { saved = localStorage.getItem("cahier-pw"); } catch (x) {}
-  if (saved) { try { show(await unlock(saved)); } catch (x) { try { localStorage.removeItem("cahier-pw"); } catch (y) {} } }
+  if (saved) { try { show(await unlock(saved)); compte(); } catch (x) { try { localStorage.removeItem("cahier-pw"); } catch (y) {} } }
 })();
 })();
 </script>

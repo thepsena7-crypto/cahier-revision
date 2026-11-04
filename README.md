@@ -13,3 +13,5 @@ Nouveau look « Pop BD » (3 novembre 2026).
 Seulement la 2e année (1re année retirée, 3 novembre 2026).
 
 Physique : chapitre 0 (outils maths), les antennes, cahier de vacances (3 novembre 2026).
+
+Statistiques de visites anonymes avec GoatCounter (4 novembre 2026) : https://cahier-ciel.goatcounter.com
